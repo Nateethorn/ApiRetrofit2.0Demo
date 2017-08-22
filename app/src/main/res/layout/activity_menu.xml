@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.toshiba.youtubedemo.MenuActivity">
+
+    <Button
+        android:id="@+id/button_recycleview"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/recycleview_okhttp"
+        />
+
+    <Button
+        android:id="@+id/button_cardview"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/cardview_okhttp"
+        />
+
+    <Button
+        android:id="@+id/button_retrofit_recycleview"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/recycleview_retrofit"
+        />
+
+    <Button
+        android:id="@+id/button_retrofit_cardview"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/cardview_retrofit"
+        />
+
+    <Button
+        android:id="@+id/button_volley_recycleview"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/recycleview_volley"
+        />
+
+    <Button
+        android:id="@+id/button_volley_cardview"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/cardview_volley"
+        />
+
+    <Button
+        android:id="@+id/button_staggered_grid_retrofit"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/staggerredgrid_retrofit2_0"
+        />
+
+
+</LinearLayout>

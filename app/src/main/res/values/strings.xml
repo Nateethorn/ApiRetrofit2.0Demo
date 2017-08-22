@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">YoutubeApiDemo</string>
+    <string name="recycleview_okhttp">RecycleView + AsyncTask + OkHttp</string>
+    <string name="cardview_okhttp">cardview + AsyncTask + OkHttp</string>
+    <string name="menu">Menu</string>
+    <string name="RecycleView">RecycleView</string>
+    <string name="CardView">CardView</string>
+    <string name="recycleview_retrofit">RecycleView + Retrofit2.0</string>
+    <string name="cardview_retrofit">CardView + Retrofit2.0</string>
+    <string name="recycleview_volley">RecycleView + Volley</string>
+    <string name="cardview_volley">CardView + Volley</string>
+    <string name="staggerredgrid_retrofit2_0">StaggerredGrid + Retrofit2.0</string>
+</resources>
