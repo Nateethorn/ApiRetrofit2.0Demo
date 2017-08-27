@@ -40,9 +40,6 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_card_view);
         ButterKnife.bind(this);
-
-//        youtubeCardView = (RecyclerView) findViewById(R.id.YoutubeCardView);
-//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_youtube_cardview_async);
     }
 
     @Override
@@ -140,11 +137,6 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-
-//            youtube_image = (ImageView) itemView.findViewById(R.id.image_youtube_cardview);
-//            avatar_image = (ImageView) itemView.findViewById(R.id.image_avatar_cardview);
-//            title = (TextView) itemView.findViewById(R.id.text_title_cardview);
-//            subtitle = (TextView) itemView.findViewById(R.id.text_subtiltle_cardview);
         }
     }
 }

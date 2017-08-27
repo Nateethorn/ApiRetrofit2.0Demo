@@ -1,7 +1,6 @@
 package com.example.toshiba.youtubedemo;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,68 +17,59 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
-public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity {
-    SwipeRefreshLayout swipeRefreshLayout;
-    RecyclerView recyclerViewRetrofit;
+public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
+    @BindView(R.id.swipe_youtube_retrofit) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recycle_view_youtube_retrofit) RecyclerView recyclerViewRetrofit;
+    ApiRetrofitPresenter apiRetrofitPresenter;
+    ApiRetrofitModel apiModel;
     List<VideoClip> clips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_recycle_view_retrofit);
-
-        recyclerViewRetrofit = (RecyclerView) findViewById(R.id.recycle_view_youtube_retrofit);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_youtube_retrofit);
+        ButterKnife.bind(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        callWithRetrofit();
+        apiModel = new ApiRetrofitModel();
+        apiRetrofitPresenter = new ApiRetrofitPresenter(apiModel);
+        apiRetrofitPresenter.bindView(this);
+        apiRetrofitPresenter.displayResult();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                callWithRetrofit();
+                apiRetrofitPresenter.bindView((ApiViewRetrofitInterface) getApplicationContext());
+                apiRetrofitPresenter.displayResult();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
-    private void callWithRetrofit(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://codemobiles.com/adhoc/youtubes/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    @Override
+    public void updateUi(Youtube youtube) {
+        clips = youtube.getClips();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerViewRetrofit.setLayoutManager(layoutManager);
 
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<Youtube> call = apiInterface.getYoutube("admin","password","foods");
-        call.enqueue(new Callback<Youtube>() {
-            @Override
-            public void onResponse(@NonNull Call<Youtube> call, @NonNull Response<Youtube> response) {
-                if(response.isSuccessful()){
-                    Youtube youtube = response.body();
-                    clips = youtube.getClips();
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerViewRetrofit.setLayoutManager(layoutManager);
+        YoutubeApiRetrofitAdapter adapter = new YoutubeApiRetrofitAdapter(getApplicationContext(),clips);
+        recyclerViewRetrofit.setAdapter(adapter);
+    }
 
-                    YoutubeApiRetrofitAdapter adapter = new YoutubeApiRetrofitAdapter(getApplicationContext(),clips);
-                    recyclerViewRetrofit.setAdapter(adapter);
-                }else{
-                    Toast.makeText(getApplicationContext(),response.errorBody().toString(),Toast.LENGTH_LONG).show();
-                }
-            }
+    @Override
+    public void updateUnSuccessResponse(ResponseBody responseBody) {
+        Toast.makeText(getApplicationContext(),responseBody.toString(),Toast.LENGTH_LONG).show();
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<Youtube> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void updateFalseResponse(Throwable t) {
+        Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
     }
 
     private class YoutubeApiRetrofitAdapter extends RecyclerView.Adapter<ViewHolder>{
@@ -121,10 +111,17 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity {
 
         ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this,itemView);
             youtube_img = (ImageView) itemView.findViewById(R.id.Youtube_Image);
             avatar_img = (ImageView) itemView.findViewById(R.id.Avatar_Image);
             Title = (TextView) itemView.findViewById(R.id.Title);
             Subtitle = (TextView) itemView.findViewById(R.id.SubTitle);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        apiRetrofitPresenter.unbindView();
     }
 }

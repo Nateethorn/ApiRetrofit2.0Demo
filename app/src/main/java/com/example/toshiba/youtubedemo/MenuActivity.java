@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.etsy.android.grid.StaggeredGridView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MenuActivity extends AppCompatActivity {
     @BindView(R.id.button_recycleview) Button recycleViewWithOkHttpBtn;

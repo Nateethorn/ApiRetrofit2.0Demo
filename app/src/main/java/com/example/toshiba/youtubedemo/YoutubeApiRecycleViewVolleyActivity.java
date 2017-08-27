@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +28,15 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity {
-    RecyclerView youtubeRecycleView;
-    SwipeRefreshLayout swipeRefreshLayout;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity implements ApiViewVolleyInterface{
+    @BindView(R.id.recycleview_youtube_volley) RecyclerView youtubeRecycleView;
+    @BindView(R.id.swipe_youtube_volley_layout) SwipeRefreshLayout swipeRefreshLayout;
     YoutubeApiVolleyAdapter adapter;
+    ApiVolleyModel apiVolleyModel;
+    ApiVolleyPresenter apiVolleyPresenter;
     List<VideoClip> clips;
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
 
@@ -38,48 +44,76 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_recycle_view_volley);
-        youtubeRecycleView = (RecyclerView) findViewById(R.id.recycleview_youtube_volley);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_youtube_volley_layout);
+        ButterKnife.bind(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        feedDataWithVolley();
+        apiVolleyModel = new ApiVolleyModel(getApplicationContext());
+        apiVolleyPresenter = new ApiVolleyPresenter(apiVolleyModel,jsonUrl);
+        apiVolleyPresenter.bind(this);
+        apiVolleyPresenter.displayAllResult();
+//        feedDataWithVolley();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                feedDataWithVolley();
-//                adapter.notifyDataSetChanged();
+//                feedDataWithVolley();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
-    private void feedDataWithVolley(){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Gson gson = new Gson();
-                Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-                clips = youtube.getClips();
-                Log.i("JsonClips",String.valueOf(clips));
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                youtubeRecycleView.setLayoutManager(layoutManager);
-
-                adapter = new YoutubeApiVolleyAdapter(getApplicationContext(),clips);
-                youtubeRecycleView.setAdapter(adapter);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        apiVolleyPresenter.unbind();
     }
+
+//    private void feedDataWithVolley(){
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Gson gson = new Gson();
+//                Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
+//                clips = youtube.getClips();
+//                Log.i("JsonClips",String.valueOf(clips));
+//
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                youtubeRecycleView.setLayoutManager(layoutManager);
+//
+//                adapter = new YoutubeApiVolleyAdapter(getApplicationContext(),clips);
+//                youtubeRecycleView.setAdapter(adapter);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        requestQueue.add(jsonObjectRequest);
+//    }
+
+    @Override
+    public void updateUi(JSONObject response) {
+        Gson gson = new Gson();
+        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
+        clips = youtube.getClips();
+        Log.i("JsonClips",String.valueOf(clips));
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        youtubeRecycleView.setLayoutManager(layoutManager);
+
+        adapter = new YoutubeApiVolleyAdapter(getApplicationContext(),clips);
+        youtubeRecycleView.setAdapter(adapter);
+    }
+
+    @Override
+    public void updateErrorResponse(VolleyError volleyError) {
+        Toast.makeText(getApplicationContext(),volleyError.toString(),Toast.LENGTH_LONG).show();
+    }
+
 
     private class YoutubeApiVolleyAdapter extends RecyclerView.Adapter<ViewHolder>{
         Context ctx;
@@ -113,18 +147,15 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView youtube_img;
-        ImageView avatar_img;
-        TextView Title;
-        TextView Subtitle;
+        @BindView(R.id.Youtube_Image) ImageView youtube_img;
+        @BindView(R.id.Avatar_Image) ImageView avatar_img;
+        @BindView(R.id.Title) TextView Title;
+        @BindView(R.id.SubTitle) TextView Subtitle;
 
 
         ViewHolder(View itemView) {
             super(itemView);
-            youtube_img = (ImageView) itemView.findViewById(R.id.Youtube_Image);
-            avatar_img = (ImageView) itemView.findViewById(R.id.Avatar_Image);
-            Title = (TextView) itemView.findViewById(R.id.Title);
-            Subtitle = (TextView) itemView.findViewById(R.id.SubTitle);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

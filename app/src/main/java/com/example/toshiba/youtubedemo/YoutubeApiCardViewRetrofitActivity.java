@@ -1,7 +1,6 @@
 package com.example.toshiba.youtubedemo;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,70 +17,65 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
-public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity {
-    RecyclerView cardViewYoutubeRetrofit;
-    SwipeRefreshLayout swipeRefreshLayout;
+public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
+    @BindView(R.id.cardview_youtube_retrofit) RecyclerView cardViewYoutubeRetrofit;
+    @BindView(R.id.swipe_youtube_cardview_retrofit) SwipeRefreshLayout swipeRefreshLayout;
     List<VideoClip> clips;
+    ApiRetrofitModel apiModel;
+    ApiRetrofitPresenter apiRetrofitPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_card_view_retrofit);
-
-        cardViewYoutubeRetrofit = (RecyclerView) findViewById(R.id.cardview_youtube_retrofit);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_youtube_cardview_retrofit);
+        ButterKnife.bind(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        callWithRetrofit();
+        apiModel = new ApiRetrofitModel();
+        apiRetrofitPresenter = new ApiRetrofitPresenter(apiModel);
+        apiRetrofitPresenter.bindView(this);
+        apiRetrofitPresenter.displayResult();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                callWithRetrofit();
+                apiRetrofitPresenter.bindView((ApiViewRetrofitInterface) getApplicationContext());
+                apiRetrofitPresenter.displayResult();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
-    private void callWithRetrofit(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://codemobiles.com/adhoc/youtubes/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        apiRetrofitPresenter.unbindView();
+    }
 
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<Youtube> call = apiInterface.getYoutube("admin","password","foods");
-        call.enqueue(new Callback<Youtube>() {
-            @Override
-            public void onResponse(@NonNull Call<Youtube> call, @NonNull Response<Youtube> response) {
-                if(response.isSuccessful()){
-                    Youtube youtube = response.body();
-                    clips = youtube.getClips();
+    @Override
+    public void updateUi(Youtube youtube) {
+        clips = youtube.getClips();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        cardViewYoutubeRetrofit.setLayoutManager(layoutManager);
 
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                    cardViewYoutubeRetrofit.setLayoutManager(layoutManager);
+        YoutubeApiCardViewAdapter adapter = new YoutubeApiCardViewAdapter(getApplicationContext(),clips);
+        cardViewYoutubeRetrofit.setAdapter(adapter);
+    }
 
-                    YoutubeApiCardViewAdapter adapter = new YoutubeApiCardViewAdapter(getApplicationContext(),clips);
-                    cardViewYoutubeRetrofit.setAdapter(adapter);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),response.errorBody().toString(),Toast.LENGTH_LONG).show();
-                }
-            }
+    @Override
+    public void updateUnSuccessResponse(ResponseBody responseBody) {
+        Toast.makeText(getApplicationContext(),responseBody.toString(),Toast.LENGTH_LONG).show();
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<Youtube> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void updateFalseResponse(Throwable t) {
+        Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
     }
 
     private class YoutubeApiCardViewAdapter extends RecyclerView.Adapter<ViewHolder>{
@@ -116,17 +110,14 @@ public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView youtube_img;
-        ImageView avatar_img;
-        TextView Title;
-        TextView Subtitle;
+        @BindView(R.id.image_youtube_cardview) ImageView youtube_img;
+        @BindView(R.id.image_avatar_cardview) ImageView avatar_img;
+        @BindView(R.id.text_title_cardview) TextView Title;
+        @BindView(R.id.text_subtiltle_cardview) TextView Subtitle;
 
         ViewHolder(View itemView) {
             super(itemView);
-            youtube_img = (ImageView) itemView.findViewById(R.id.image_youtube_cardview);
-            avatar_img = (ImageView) itemView.findViewById(R.id.image_avatar_cardview);
-            Title = (TextView) itemView.findViewById(R.id.text_title_cardview);
-            Subtitle = (TextView) itemView.findViewById(R.id.text_subtiltle_cardview);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

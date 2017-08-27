@@ -27,57 +27,83 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity {
-    RecyclerView recycleViewVolley;
-    SwipeRefreshLayout swipeRefreshLayout;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implements ApiViewVolleyInterface {
+    @BindView(R.id.cardview_youtube_volley) RecyclerView recycleViewVolley;
+    @BindView(R.id.swipe_youtube_cardview_volley) SwipeRefreshLayout swipeRefreshLayout;
     List<VideoClip> clips;
+    ApiVolleyModel apiVolleyModel;
+    ApiVolleyPresenter apiVolleyPresenter;
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_card_view_volley);
-
-        recycleViewVolley = (RecyclerView) findViewById(R.id.cardview_youtube_volley);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_youtube_cardview_volley);
+        ButterKnife.bind(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        feedDataWithVolley();
+        apiVolleyModel = new ApiVolleyModel(getApplicationContext());
+        apiVolleyPresenter = new ApiVolleyPresenter(apiVolleyModel,jsonUrl);
+        apiVolleyPresenter.bind(this);
+        apiVolleyPresenter.displayAllResult();
+//        feedDataWithVolley();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                feedDataWithVolley();
+//                feedDataWithVolley();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
-    private void feedDataWithVolley(){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Gson gson = new Gson();
-                Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-                clips = youtube.getClips();
-                Log.i("JsonClips",String.valueOf(clips));
+//    private void feedDataWithVolley(){
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Gson gson = new Gson();
+//                Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
+//                clips = youtube.getClips();
+//                Log.i("JsonClips",String.valueOf(clips));
+//
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                recycleViewVolley.setLayoutManager(layoutManager);
+//
+//                YoutubeApiCardViewVolleyAdapter adapter = new YoutubeApiCardViewVolleyAdapter(getApplicationContext(),clips);
+//                recycleViewVolley.setAdapter(adapter);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        requestQueue.add(jsonObjectRequest);
+//    }
 
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                recycleViewVolley.setLayoutManager(layoutManager);
+    @Override
+    public void updateUi(JSONObject response) {
+        Gson gson = new Gson();
+        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
+        clips = youtube.getClips();
+        Log.i("JsonClips",String.valueOf(clips));
 
-                YoutubeApiCardViewVolleyAdapter adapter = new YoutubeApiCardViewVolleyAdapter(getApplicationContext(),clips);
-                recycleViewVolley.setAdapter(adapter);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recycleViewVolley.setLayoutManager(layoutManager);
+
+        YoutubeApiCardViewVolleyAdapter adapter = new YoutubeApiCardViewVolleyAdapter(getApplicationContext(),clips);
+        recycleViewVolley.setAdapter(adapter);
+    }
+
+    @Override
+    public void updateErrorResponse(VolleyError volleyError) {
+        Toast.makeText(getApplicationContext(),volleyError.toString(),Toast.LENGTH_LONG).show();
     }
 
     private class YoutubeApiCardViewVolleyAdapter extends RecyclerView.Adapter<ViewHolder>{
@@ -112,18 +138,14 @@ public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView youtube_image;
-        ImageView avatar_image;
-        TextView title;
-        TextView subtitle;
+        @BindView(R.id.image_youtube_cardview) ImageView youtube_image;
+        @BindView(R.id.image_avatar_cardview) ImageView avatar_image;
+        @BindView(R.id.text_title_cardview) TextView title;
+        @BindView(R.id.text_subtiltle_cardview) TextView subtitle;
 
         ViewHolder(View itemView) {
             super(itemView);
-
-            youtube_image = (ImageView) itemView.findViewById(R.id.image_youtube_cardview);
-            avatar_image = (ImageView) itemView.findViewById(R.id.image_avatar_cardview);
-            title = (TextView) itemView.findViewById(R.id.text_title_cardview);
-            subtitle = (TextView) itemView.findViewById(R.id.text_subtiltle_cardview);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

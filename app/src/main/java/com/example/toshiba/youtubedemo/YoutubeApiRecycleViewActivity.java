@@ -3,13 +3,11 @@ package com.example.toshiba.youtubedemo;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +32,16 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    SwipeRefreshLayout refreshLayout;
-    RecyclerView youtubeRecycleView;
+    @BindView(R.id.swipe_refresh_async_layout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.YoutubeRecycleView) RecyclerView youtubeRecycleView;
     RecyclerView.LayoutManager layoutManager;
     YoutubeClipRecycleViewAdapter adapter;
     List<VideoClip> clips;
@@ -51,8 +51,7 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_recycleview);
-        youtubeRecycleView = (RecyclerView) findViewById(R.id.YoutubeRecycleView);
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_async_layout);
+        ButterKnife.bind(this);
         refreshLayout.setColorSchemeColors(Color.parseColor("#4183D7"),
                 Color.parseColor("#F62459"),
                 Color.parseColor("#03C9A9"),
@@ -62,7 +61,7 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        createSynchronousOKHttp();
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -71,8 +70,6 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
                 refreshLayout.setRefreshing(false);
             }
         });
-
-        createSynchronousOKHttp();
 //        AsynchronousOKHttp();
 //        getJsonDataWithVolley();
 //        createRetrofitCall();
@@ -124,7 +121,6 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
 
     protected void createAsynchronousOKHttp(){
         new AsyncTask<String, Void, JSONObject>(){
-
             @Override
             protected JSONObject doInBackground(String... strings) {
                 OkHttpClient okHttpClient = new OkHttpClient();
@@ -169,8 +165,7 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
                                 YoutubeClipRecycleViewAdapter adapter = new YoutubeClipRecycleViewAdapter(YoutubeApiRecycleViewActivity.this,clips);
                                 youtubeRecycleView.setAdapter(adapter);
                             }
-                        });
-                    }
+                        });                    }
 
                     void updateViewOnFailure(int resultCode){
                         Toast.makeText(YoutubeApiRecycleViewActivity.this,String.valueOf(resultCode),Toast.LENGTH_LONG).show();
@@ -214,17 +209,14 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView youtube_img;
-        ImageView avatar_img;
-        TextView Title;
-        TextView Subtitle;
+        @BindView(R.id.Youtube_Image) ImageView youtube_img;
+        @BindView(R.id.Avatar_Image) ImageView avatar_img;
+        @BindView(R.id.Title) TextView Title;
+        @BindView(R.id.SubTitle) TextView Subtitle;
 
         ViewHolder(View itemView) {
             super(itemView);
-            youtube_img = (ImageView) itemView.findViewById(R.id.Youtube_Image);
-            avatar_img = (ImageView) itemView.findViewById(R.id.Avatar_Image);
-            Title = (TextView) itemView.findViewById(R.id.Title);
-            Subtitle = (TextView) itemView.findViewById(R.id.SubTitle);
+            ButterKnife.bind(this,itemView);
         }
     }
 }
