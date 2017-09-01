@@ -29,9 +29,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class YoutubeApiCardViewActivity extends AppCompatActivity {
-    final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.YoutubeCardView) RecyclerView youtubeCardView;
-    @BindView(R.id.swipe_youtube_cardview_async) SwipeRefreshLayout swipeRefreshLayout;
+    final String JsonURL = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
+    @BindView(R.id.YoutubeCardView) private RecyclerView mYoutubeCardView;
+    @BindView(R.id.swipe_youtube_cardview_async) private SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView.LayoutManager layoutManager;
     List<VideoClip> clips;
 
@@ -46,11 +46,11 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         createSynchronousOkHttp();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 createSynchronousOkHttp();
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -62,7 +62,7 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
 
                 OkHttpClient okHttpClient = new OkHttpClient();
                 Request.Builder builder = new Request.Builder();
-                Request request = builder.url(jsonUrl).build();
+                Request request = builder.url(JsonURL).build();
 
                 try {
                     Response response = okHttpClient.newCall(request).execute();
@@ -88,10 +88,10 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
                 clips = youtube.getClips();
 
                 layoutManager = new LinearLayoutManager(getApplicationContext());
-                youtubeCardView.setLayoutManager(layoutManager);
+                mYoutubeCardView.setLayoutManager(layoutManager);
 
                 YoutubeClipCardViewAdapter adapter = new YoutubeClipCardViewAdapter(getApplicationContext(),clips);
-                youtubeCardView.setAdapter(adapter);
+                mYoutubeCardView.setAdapter(adapter);
             }
         }.execute();
     }

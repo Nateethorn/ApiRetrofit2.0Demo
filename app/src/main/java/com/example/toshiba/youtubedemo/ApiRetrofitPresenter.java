@@ -7,36 +7,36 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 class ApiRetrofitPresenter {
-    private ApiRetrofitModel apiModel;
-    private ApiViewRetrofitInterface apiViewRetrofitInterface;
+    private ApiRetrofitModel mApiModel;
+    private ApiViewRetrofitInterface mApiViewRetrofitInterface;
 
-    ApiRetrofitPresenter(ApiRetrofitModel apiModel) {
-        this.apiModel = apiModel;
+    ApiRetrofitPresenter(ApiRetrofitModel mApiModel) {
+        this.mApiModel = mApiModel;
     }
 
     void bindView(ApiViewRetrofitInterface apiViewRetrofitInterface) {
-        this.apiViewRetrofitInterface = apiViewRetrofitInterface;
+        this.mApiViewRetrofitInterface = apiViewRetrofitInterface;
     }
 
     void unbindView(){
-        apiViewRetrofitInterface = null;
+        mApiViewRetrofitInterface = null;
     }
 
     void displayResult() {
-        apiModel.getYoutube("admin","password","foods")
+        mApiModel.getYoutube("admin","password","foods")
                 .enqueue(new Callback<Youtube>() {
                     @Override
                     public void onResponse(@NonNull Call<Youtube> call, @NonNull Response<Youtube> response) {
-                        if (response.isSuccessful()){
-                            apiViewRetrofitInterface.updateUi(response.body());
+                        if (response.isSuccessful()) {
+                            mApiViewRetrofitInterface.updateUi(response.body());
                         } else {
-                            apiViewRetrofitInterface.updateUnSuccessResponse(response.errorBody());
+                            mApiViewRetrofitInterface.updateUnSuccessResponse(response.errorBody());
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<Youtube> call, @NonNull Throwable t) {
-                        apiViewRetrofitInterface.updateFalseResponse(t);
+                        mApiViewRetrofitInterface.updateFalseResponse(t);
                     }
                 });
     }

@@ -7,42 +7,31 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 class ApiVolleyPresenter {
-    private ApiVolleyModel apiVolleyModel;
-    private ApiViewVolleyInterface apiViewVolleyInterface;
-    private JSONObject jsonObject;
-    private VolleyError volleyError;
-    private String url;
+    private ApiVolleyModel mApiVolleyModel;
+    private ApiViewVolleyInterface mApiViewVolleyInterface;
+    private String mUrl;
 
-    public ApiVolleyPresenter(ApiVolleyModel apiVolleyModel, ApiViewVolleyInterface apiVolleyInterface) {
-        this.apiVolleyModel = apiVolleyModel;
-        this.apiViewVolleyInterface = apiVolleyInterface;
+    ApiVolleyPresenter(ApiVolleyModel mApiVolleyModel, String mUrl) {
+        this.mApiVolleyModel = mApiVolleyModel;
+        this.mUrl = mUrl;
     }
 
-    ApiVolleyPresenter(JSONObject jsonObject) { this.jsonObject = jsonObject; }
+    void bind(ApiViewVolleyInterface apiViewVolleyInterface){ this.mApiViewVolleyInterface = apiViewVolleyInterface; }
 
-    ApiVolleyPresenter(VolleyError volleyError) { this.volleyError = volleyError; }
-
-    ApiVolleyPresenter(ApiVolleyModel apiVolleyModel,String url) {
-        this.apiVolleyModel = apiVolleyModel;
-        this.url = url;
-    }
-
-    void bind(ApiViewVolleyInterface apiViewVolleyInterface){ this.apiViewVolleyInterface = apiViewVolleyInterface; }
-
-    void unbind(){ apiViewVolleyInterface = null; }
+    void unbind(){ mApiViewVolleyInterface = null; }
 
     void displayAllResult() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, mUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                apiViewVolleyInterface.updateUi(response);
+                mApiViewVolleyInterface.updateUi(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                apiViewVolleyInterface.updateErrorResponse(error);
+                mApiViewVolleyInterface.updateErrorResponse(error);
             }
         });
-        apiVolleyModel.createVolleyConnection().add(jsonObjectRequest);
+        mApiVolleyModel.createVolleyConnection().add(jsonObjectRequest);
     }
 }

@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 
 public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
-    @BindView(R.id.swipe_youtube_retrofit) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.recycle_view_youtube_retrofit) RecyclerView recyclerViewRetrofit;
+    @BindView(R.id.swipe_youtube_retrofit) private SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.recycle_view_youtube_retrofit) private RecyclerView mRecyclerViewRetrofit;
     ApiRetrofitPresenter apiRetrofitPresenter;
     ApiRetrofitModel apiModel;
     List<VideoClip> clips;
@@ -42,12 +42,12 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity imp
         apiRetrofitPresenter = new ApiRetrofitPresenter(apiModel);
         apiRetrofitPresenter.bindView(this);
         apiRetrofitPresenter.displayResult();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 apiRetrofitPresenter.bindView((ApiViewRetrofitInterface) getApplicationContext());
                 apiRetrofitPresenter.displayResult();
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -56,10 +56,10 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity imp
     public void updateUi(Youtube youtube) {
         clips = youtube.getClips();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerViewRetrofit.setLayoutManager(layoutManager);
+        mRecyclerViewRetrofit.setLayoutManager(layoutManager);
 
         YoutubeApiRetrofitAdapter adapter = new YoutubeApiRetrofitAdapter(getApplicationContext(),clips);
-        recyclerViewRetrofit.setAdapter(adapter);
+        mRecyclerViewRetrofit.setAdapter(adapter);
     }
 
     @Override

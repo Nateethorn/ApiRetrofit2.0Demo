@@ -8,10 +8,10 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_youtube_volley_layout"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycleview_youtube_volley"

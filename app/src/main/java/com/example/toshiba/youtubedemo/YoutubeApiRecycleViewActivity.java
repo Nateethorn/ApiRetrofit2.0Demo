@@ -15,12 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
@@ -40,8 +34,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.swipe_refresh_async_layout) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.YoutubeRecycleView) RecyclerView youtubeRecycleView;
+    @BindView(R.id.swipe_refresh_async_layout) private SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.YoutubeRecycleView) private RecyclerView mYoutubeRecycleView;
     RecyclerView.LayoutManager layoutManager;
     YoutubeClipRecycleViewAdapter adapter;
     List<VideoClip> clips;
@@ -52,7 +46,7 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_recycleview);
         ButterKnife.bind(this);
-        refreshLayout.setColorSchemeColors(Color.parseColor("#4183D7"),
+        mRefreshLayout.setColorSchemeColors(Color.parseColor("#4183D7"),
                 Color.parseColor("#F62459"),
                 Color.parseColor("#03C9A9"),
                 Color.parseColor("#F4D03F"));
@@ -62,12 +56,12 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         createSynchronousOKHttp();
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 createSynchronousOKHttp();
                 adapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
+                mRefreshLayout.setRefreshing(false);
             }
         });
 //        AsynchronousOKHttp();
@@ -107,14 +101,14 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
                 Youtube youtube = gson.fromJson(String.valueOf(jsonObject),Youtube.class);
                 clips = youtube.getClips();
 
-                youtubeRecycleView.setHasFixedSize(true);
+                mYoutubeRecycleView.setHasFixedSize(true);
 
                 layoutManager = new LinearLayoutManager(YoutubeApiRecycleViewActivity.this);
                 layoutManager.setAutoMeasureEnabled(true);
-                youtubeRecycleView.setLayoutManager(layoutManager);
+                mYoutubeRecycleView.setLayoutManager(layoutManager);
 
                 adapter = new YoutubeClipRecycleViewAdapter(YoutubeApiRecycleViewActivity.this,clips);
-                youtubeRecycleView.setAdapter(adapter);
+                mYoutubeRecycleView.setAdapter(adapter);
             }
         }.execute();
     }
@@ -155,15 +149,15 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
                                 Youtube youtube = gson.fromJson(String.valueOf(jsonObject),Youtube.class);
                                 clips = youtube.getClips();
 
-                                youtubeRecycleView = (RecyclerView) findViewById(R.id.YoutubeRecycleView);
-                                youtubeRecycleView.setHasFixedSize(true);
+                                mYoutubeRecycleView = (RecyclerView) findViewById(R.id.YoutubeRecycleView);
+                                mYoutubeRecycleView.setHasFixedSize(true);
 
                                 layoutManager = new LinearLayoutManager(YoutubeApiRecycleViewActivity.this);
                                 layoutManager.setAutoMeasureEnabled(true);
-                                youtubeRecycleView.setLayoutManager(layoutManager);
+                                mYoutubeRecycleView.setLayoutManager(layoutManager);
 
                                 YoutubeClipRecycleViewAdapter adapter = new YoutubeClipRecycleViewAdapter(YoutubeApiRecycleViewActivity.this,clips);
-                                youtubeRecycleView.setAdapter(adapter);
+                                mYoutubeRecycleView.setAdapter(adapter);
                             }
                         });                    }
 

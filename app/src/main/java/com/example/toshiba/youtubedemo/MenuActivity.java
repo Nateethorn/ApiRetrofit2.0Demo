@@ -10,34 +10,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MenuActivity extends AppCompatActivity {
-    @BindView(R.id.button_recycleview) Button recycleViewWithOkHttpBtn;
-    @BindView(R.id.button_cardview) Button cardViewWithOkHttpBtn;
-    @BindView(R.id.button_retrofit_recycleview) Button recycleViewWithRetrofit;
-    @BindView(R.id.button_retrofit_cardview) Button cardViewWithRetrofit;
-    @BindView(R.id.button_volley_recycleview) Button recycleViewWithVolleyBtn;
-    @BindView(R.id.button_volley_cardview) Button cardViewWithVolleyBtn;
-    @BindView(R.id.button_staggered_grid_retrofit) Button StaggeredGridWithRetrofitBtn;
+    @BindView(R.id.button_recycleview) private Button mRecycleViewWithOkHttpBtn;
+    @BindView(R.id.button_cardview) private Button mCardViewWithOkHttpBtn;
+    @BindView(R.id.button_retrofit_recycleview) private Button mRecycleViewWithRetrofit;
+    @BindView(R.id.button_retrofit_cardview) private Button mCardViewWithRetrofit;
+    @BindView(R.id.button_volley_recycleview) private Button mRecycleViewWithVolleyBtn;
+    @BindView(R.id.button_volley_cardview) private Button mCardViewWithVolleyBtn;
+    @BindView(R.id.button_staggered_grid_retrofit) private Button mStaggeredGridWithRetrofitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         ButterKnife.bind(this);
-
-//        recycleViewWithOkHttpBtn = (Button) findViewById(R.id.button_recycleview);
-//        cardViewWithOkHttpBtn = (Button) findViewById(R.id.button_cardview);
-//        recycleViewWithRetrofit = (Button) findViewById(R.id.button_retrofit_recycleview);
-//        cardViewWithRetrofit = (Button) findViewById(R.id.button_retrofit_cardview);
-//        recycleViewWithVolleyBtn = (Button) findViewById(R.id.button_volley_recycleview);
-//        cardViewWithVolleyBtn = (Button) findViewById(R.id.button_volley_cardview);
-//        StaggeredGridWithRetrofitBtn = (Button) findViewById(R.id.button_staggered_grid_retrofit);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        recycleViewWithOkHttpBtn.setOnClickListener(new View.OnClickListener() {
+        mRecycleViewWithOkHttpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),YoutubeApiRecycleViewActivity.class);
@@ -45,7 +37,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        cardViewWithOkHttpBtn.setOnClickListener(new View.OnClickListener() {
+        mCardViewWithOkHttpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),YoutubeApiCardViewActivity.class);
@@ -53,7 +45,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        recycleViewWithRetrofit.setOnClickListener(new View.OnClickListener() {
+        mRecycleViewWithRetrofit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),YoutubeApiRecycleViewRetrofitActivity.class);
@@ -61,7 +53,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        cardViewWithRetrofit.setOnClickListener(new View.OnClickListener() {
+        mCardViewWithRetrofit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),YoutubeApiCardViewRetrofitActivity.class);
@@ -69,7 +61,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        recycleViewWithVolleyBtn.setOnClickListener(new View.OnClickListener() {
+        mRecycleViewWithVolleyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),YoutubeApiRecycleViewVolleyActivity.class);
@@ -77,7 +69,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        cardViewWithVolleyBtn.setOnClickListener(new View.OnClickListener() {
+        mCardViewWithVolleyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),YoutubeApiCardViewVolleyActivity.class);
@@ -85,7 +77,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        StaggeredGridWithRetrofitBtn.setOnClickListener(new View.OnClickListener() {
+        mStaggeredGridWithRetrofitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),TreeHouseApiStaggeredGridActivity.class);

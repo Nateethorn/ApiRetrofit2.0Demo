@@ -10,17 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
@@ -32,8 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity implements ApiViewVolleyInterface{
-    @BindView(R.id.recycleview_youtube_volley) RecyclerView youtubeRecycleView;
-    @BindView(R.id.swipe_youtube_volley_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recycleview_youtube_volley) RecyclerView mYoutubeRecycleView;
+    @BindView(R.id.swipe_youtube_volley_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     YoutubeApiVolleyAdapter adapter;
     ApiVolleyModel apiVolleyModel;
     ApiVolleyPresenter apiVolleyPresenter;
@@ -54,12 +48,10 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
         apiVolleyPresenter = new ApiVolleyPresenter(apiVolleyModel,jsonUrl);
         apiVolleyPresenter.bind(this);
         apiVolleyPresenter.displayAllResult();
-//        feedDataWithVolley();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                feedDataWithVolley();
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -70,31 +62,6 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
         apiVolleyPresenter.unbind();
     }
 
-//    private void feedDataWithVolley(){
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Gson gson = new Gson();
-//                Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-//                clips = youtube.getClips();
-//                Log.i("JsonClips",String.valueOf(clips));
-//
-//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                youtubeRecycleView.setLayoutManager(layoutManager);
-//
-//                adapter = new YoutubeApiVolleyAdapter(getApplicationContext(),clips);
-//                youtubeRecycleView.setAdapter(adapter);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        requestQueue.add(jsonObjectRequest);
-//    }
-
     @Override
     public void updateUi(JSONObject response) {
         Gson gson = new Gson();
@@ -103,17 +70,16 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
         Log.i("JsonClips",String.valueOf(clips));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        youtubeRecycleView.setLayoutManager(layoutManager);
+        mYoutubeRecycleView.setLayoutManager(layoutManager);
 
         adapter = new YoutubeApiVolleyAdapter(getApplicationContext(),clips);
-        youtubeRecycleView.setAdapter(adapter);
+        mYoutubeRecycleView.setAdapter(adapter);
     }
 
     @Override
     public void updateErrorResponse(VolleyError volleyError) {
         Toast.makeText(getApplicationContext(),volleyError.toString(),Toast.LENGTH_LONG).show();
     }
-
 
     private class YoutubeApiVolleyAdapter extends RecyclerView.Adapter<ViewHolder>{
         Context ctx;

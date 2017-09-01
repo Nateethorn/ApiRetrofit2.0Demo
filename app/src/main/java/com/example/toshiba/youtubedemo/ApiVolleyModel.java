@@ -6,12 +6,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 class ApiVolleyModel implements ApiVolleyInterface{
-    private Context ctx;
+    private Context mContext;
 
-    ApiVolleyModel(Context ctx) {
-        this.ctx = ctx;
+    ApiVolleyModel(Context mContext) {
+        this.mContext = mContext;
     }
 
     @Override
-    public RequestQueue createVolleyConnection() { return Volley.newRequestQueue(ctx); }
+    public RequestQueue createVolleyConnection() {
+        return Volley.newRequestQueue(mContext);
+    }
 }

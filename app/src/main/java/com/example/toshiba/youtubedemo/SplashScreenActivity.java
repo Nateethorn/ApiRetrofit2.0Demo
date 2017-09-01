@@ -14,16 +14,16 @@ import android.widget.Toast;
 
 public class SplashScreenActivity extends AppCompatActivity {
     final static int ACCESS_CODE = 111;
-    private Handler handler;
-    private Runnable runnable;
+    private Handler mHandler;
+    private Runnable mRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        handler = new Handler();
-        runnable = new Runnable() {
+        mHandler = new Handler();
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashScreenActivity.this,MenuActivity.class);
@@ -36,28 +36,24 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            String permission[] = {Manifest.permission.INTERNET};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            if(!(checkPermission(this,permission))){
+            String permission[] = {Manifest.permission.INTERNET};
+            if (!(checkPermission(this,permission))) {
                 ActivityCompat.requestPermissions(this,permission,ACCESS_CODE);
-            }
-            else{
+            } else {
                 Toast.makeText(SplashScreenActivity.this,"1:1",Toast.LENGTH_LONG).show();
-                handler.postDelayed(runnable,3000);
+                mHandler.postDelayed(mRunnable,3000);
             }
-        }
-        else{
+        } else {
             Toast.makeText(SplashScreenActivity.this,"1:2",Toast.LENGTH_LONG).show();
-            handler.postDelayed(runnable,3000);
+            mHandler.postDelayed(mRunnable,3000);
         }
     }
 
     public boolean checkPermission(Context context, String[] Permission){
         for(String permission : Permission){
-            if(ActivityCompat.checkSelfPermission(context,permission) != PackageManager.PERMISSION_GRANTED){
-                return false;
-            }
+            if (ActivityCompat.checkSelfPermission(context,permission) != PackageManager.PERMISSION_GRANTED) { return false; }
         }
         return true;
     }
@@ -68,15 +64,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         switch (requestCode) {
             case ACCESS_CODE : {
                 int count = 0;
-                for (int i = 0; i < grantResults.length; i++) {
-                    if (grantResults.length > 0 && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                for (int grantResult : grantResults) {
+                    if (grantResults.length > 0 && grantResult == PackageManager.PERMISSION_GRANTED) {
                         count++;
                     }
-                }
-                if (count == grantResults.length) {
-                    handler.postDelayed(runnable,3000);
-                }
-                else {
+                } if (count == grantResults.length) {
+                    mHandler.postDelayed(mRunnable,3000);
+                } else {
                     Toast.makeText(SplashScreenActivity.this,"Some Permission has Denied",Toast.LENGTH_LONG).show();
                 }
             }

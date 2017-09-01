@@ -14,12 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
@@ -31,12 +26,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implements ApiViewVolleyInterface {
-    @BindView(R.id.cardview_youtube_volley) RecyclerView recycleViewVolley;
-    @BindView(R.id.swipe_youtube_cardview_volley) SwipeRefreshLayout swipeRefreshLayout;
+    final String JsonURL = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
+    @BindView(R.id.cardview_youtube_volley) private RecyclerView mRecycleViewVolley;
+    @BindView(R.id.swipe_youtube_cardview_volley) private SwipeRefreshLayout mSwipeRefreshLayout;
     List<VideoClip> clips;
     ApiVolleyModel apiVolleyModel;
     ApiVolleyPresenter apiVolleyPresenter;
-    final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,43 +44,16 @@ public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implemen
     protected void onStart() {
         super.onStart();
         apiVolleyModel = new ApiVolleyModel(getApplicationContext());
-        apiVolleyPresenter = new ApiVolleyPresenter(apiVolleyModel,jsonUrl);
+        apiVolleyPresenter = new ApiVolleyPresenter(apiVolleyModel,JsonURL);
         apiVolleyPresenter.bind(this);
         apiVolleyPresenter.displayAllResult();
-//        feedDataWithVolley();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                feedDataWithVolley();
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
-
-//    private void feedDataWithVolley(){
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Gson gson = new Gson();
-//                Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-//                clips = youtube.getClips();
-//                Log.i("JsonClips",String.valueOf(clips));
-//
-//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                recycleViewVolley.setLayoutManager(layoutManager);
-//
-//                YoutubeApiCardViewVolleyAdapter adapter = new YoutubeApiCardViewVolleyAdapter(getApplicationContext(),clips);
-//                recycleViewVolley.setAdapter(adapter);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        requestQueue.add(jsonObjectRequest);
-//    }
 
     @Override
     public void updateUi(JSONObject response) {
@@ -95,10 +63,10 @@ public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implemen
         Log.i("JsonClips",String.valueOf(clips));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recycleViewVolley.setLayoutManager(layoutManager);
+        mRecycleViewVolley.setLayoutManager(layoutManager);
 
         YoutubeApiCardViewVolleyAdapter adapter = new YoutubeApiCardViewVolleyAdapter(getApplicationContext(),clips);
-        recycleViewVolley.setAdapter(adapter);
+        mRecycleViewVolley.setAdapter(adapter);
     }
 
     @Override
@@ -110,7 +78,7 @@ public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implemen
         Context ctx;
         List<VideoClip> clips;
 
-        public YoutubeApiCardViewVolleyAdapter(Context ctx, List<VideoClip> clips) {
+        YoutubeApiCardViewVolleyAdapter(Context ctx, List<VideoClip> clips) {
             this.ctx = ctx;
             this.clips = clips;
         }
