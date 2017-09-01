@@ -4,11 +4,9 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
-/**
- * Created by Toshiba on 27/08/2017.
- */
+import java.util.List;
 
 interface ApiViewVolleyInterface {
-    void updateUi(JSONObject jsonObject);
+    void updateUi(List<VideoClip> clips);
     void updateErrorResponse(VolleyError volleyError);
 }

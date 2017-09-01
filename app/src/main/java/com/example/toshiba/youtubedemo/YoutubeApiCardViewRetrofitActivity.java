@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 
 public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
-    @BindView(R.id.cardview_youtube_retrofit) private RecyclerView mCardViewYoutubeRetrofit;
-    @BindView(R.id.swipe_youtube_cardview_retrofit) private SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.cardview_youtube_retrofit) RecyclerView mCardViewYoutubeRetrofit;
+    @BindView(R.id.swipe_youtube_cardview_retrofit) SwipeRefreshLayout mSwipeRefreshLayout;
     List<VideoClip> clips;
     ApiRetrofitModel apiModel;
     ApiRetrofitPresenter apiRetrofitPresenter;

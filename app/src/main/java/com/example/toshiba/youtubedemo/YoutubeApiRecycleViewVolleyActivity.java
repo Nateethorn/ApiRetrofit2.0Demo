@@ -63,10 +63,10 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
     }
 
     @Override
-    public void updateUi(JSONObject response) {
-        Gson gson = new Gson();
-        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-        clips = youtube.getClips();
+    public void updateUi(List<VideoClip> clips) {
+//        Gson gson = new Gson();
+//        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
+//        clips = youtube.getClips();
         Log.i("JsonClips",String.valueOf(clips));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

@@ -27,8 +27,8 @@ import butterknife.ButterKnife;
 
 public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implements ApiViewVolleyInterface {
     final String JsonURL = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.cardview_youtube_volley) private RecyclerView mRecycleViewVolley;
-    @BindView(R.id.swipe_youtube_cardview_volley) private SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.cardview_youtube_volley) RecyclerView mRecycleViewVolley;
+    @BindView(R.id.swipe_youtube_cardview_volley) SwipeRefreshLayout mSwipeRefreshLayout;
     List<VideoClip> clips;
     ApiVolleyModel apiVolleyModel;
     ApiVolleyPresenter apiVolleyPresenter;
@@ -56,10 +56,10 @@ public class YoutubeApiCardViewVolleyActivity extends AppCompatActivity implemen
     }
 
     @Override
-    public void updateUi(JSONObject response) {
-        Gson gson = new Gson();
-        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-        clips = youtube.getClips();
+    public void updateUi(List<VideoClip> clips) {
+//        Gson gson = new Gson();
+//        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
+//        clips = youtube.getClips();
         Log.i("JsonClips",String.valueOf(clips));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

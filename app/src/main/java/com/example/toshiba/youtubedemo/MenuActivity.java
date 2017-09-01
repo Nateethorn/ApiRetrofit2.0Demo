@@ -10,13 +10,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MenuActivity extends AppCompatActivity {
-    @BindView(R.id.button_recycleview) private Button mRecycleViewWithOkHttpBtn;
-    @BindView(R.id.button_cardview) private Button mCardViewWithOkHttpBtn;
-    @BindView(R.id.button_retrofit_recycleview) private Button mRecycleViewWithRetrofit;
-    @BindView(R.id.button_retrofit_cardview) private Button mCardViewWithRetrofit;
-    @BindView(R.id.button_volley_recycleview) private Button mRecycleViewWithVolleyBtn;
-    @BindView(R.id.button_volley_cardview) private Button mCardViewWithVolleyBtn;
-    @BindView(R.id.button_staggered_grid_retrofit) private Button mStaggeredGridWithRetrofitBtn;
+    @BindView(R.id.button_recycleview) Button mRecycleViewWithOkHttpBtn;
+    @BindView(R.id.button_cardview) Button mCardViewWithOkHttpBtn;
+    @BindView(R.id.button_retrofit_recycleview) Button mRecycleViewWithRetrofit;
+    @BindView(R.id.button_retrofit_cardview) Button mCardViewWithRetrofit;
+    @BindView(R.id.button_volley_recycleview) Button mRecycleViewWithVolleyBtn;
+    @BindView(R.id.button_volley_cardview) Button mCardViewWithVolleyBtn;
+    @BindView(R.id.button_staggered_grid_retrofit) Button mStaggeredGridWithRetrofitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

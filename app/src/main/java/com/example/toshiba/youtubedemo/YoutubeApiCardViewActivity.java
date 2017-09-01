@@ -30,8 +30,8 @@ import butterknife.ButterKnife;
 
 public class YoutubeApiCardViewActivity extends AppCompatActivity {
     final String JsonURL = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.YoutubeCardView) private RecyclerView mYoutubeCardView;
-    @BindView(R.id.swipe_youtube_cardview_async) private SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.YoutubeCardView) RecyclerView mYoutubeCardView;
+    @BindView(R.id.swipe_youtube_cardview_async) SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView.LayoutManager layoutManager;
     List<VideoClip> clips;
 

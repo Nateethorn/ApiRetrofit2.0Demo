@@ -34,8 +34,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.swipe_refresh_async_layout) private SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.YoutubeRecycleView) private RecyclerView mYoutubeRecycleView;
+    @BindView(R.id.swipe_refresh_async_layout) SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.YoutubeRecycleView) RecyclerView mYoutubeRecycleView;
     RecyclerView.LayoutManager layoutManager;
     YoutubeClipRecycleViewAdapter adapter;
     List<VideoClip> clips;

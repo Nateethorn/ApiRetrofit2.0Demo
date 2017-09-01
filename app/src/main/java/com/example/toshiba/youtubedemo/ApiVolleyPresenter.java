@@ -4,7 +4,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
+
+import java.util.List;
 
 class ApiVolleyPresenter {
     private ApiVolleyModel mApiVolleyModel;
@@ -24,7 +28,8 @@ class ApiVolleyPresenter {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, mUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                mApiViewVolleyInterface.updateUi(response);
+                List<VideoClip> clips = getClips(response);
+                mApiViewVolleyInterface.updateUi(clips);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -33,5 +38,11 @@ class ApiVolleyPresenter {
             }
         });
         mApiVolleyModel.createVolleyConnection().add(jsonObjectRequest);
+    }
+
+    private List<VideoClip> getClips(JSONObject jsonObject){
+        Gson gson = new Gson();
+        Youtube youtube = gson.fromJson(String.valueOf(jsonObject),Youtube.class);
+        return youtube.getClips();
     }
 }
