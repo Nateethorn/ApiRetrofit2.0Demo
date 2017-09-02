@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 
 public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
-    @BindView(R.id.swipe_youtube_retrofit) SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recycle_view_youtube_retrofit) RecyclerView mRecyclerViewRetrofit;
+    @BindView(R.id.swipe_youtube_retrofit) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recycleView_youtube_retrofit) RecyclerView recyclerViewRetrofit;
     ApiRetrofitPresenter apiRetrofitPresenter;
     ApiRetrofitModel apiModel;
     List<VideoClip> clips;
@@ -42,24 +42,23 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity imp
         apiRetrofitPresenter = new ApiRetrofitPresenter(apiModel);
         apiRetrofitPresenter.bindView(this);
         apiRetrofitPresenter.displayResult();
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 apiRetrofitPresenter.bindView((ApiViewRetrofitInterface) getApplicationContext());
                 apiRetrofitPresenter.displayResult();
-                mSwipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     @Override
-    public void updateUi(Youtube youtube) {
-        clips = youtube.getClips();
+    public void updateUi(List<VideoClip> clips) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        mRecyclerViewRetrofit.setLayoutManager(layoutManager);
+        recyclerViewRetrofit.setLayoutManager(layoutManager);
 
         YoutubeApiRetrofitAdapter adapter = new YoutubeApiRetrofitAdapter(getApplicationContext(),clips);
-        mRecyclerViewRetrofit.setAdapter(adapter);
+        recyclerViewRetrofit.setAdapter(adapter);
     }
 
     @Override
@@ -93,8 +92,8 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity imp
 
             Glide.with(ctx).load(videoClip.getYoutube_image()).fitCenter().into(holder.youtube_img);
             Glide.with(ctx).load(videoClip.getAvatar_image()).fitCenter().into(holder.avatar_img);
-            holder.Title.setText(videoClip.getTitle());
-            holder.Subtitle.setText(videoClip.getSubtitle());
+            holder.title.setText(videoClip.getTitle());
+            holder.subtitle.setText(videoClip.getSubtitle());
         }
 
         @Override
@@ -104,18 +103,14 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity imp
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView youtube_img;
-        ImageView avatar_img;
-        TextView Title;
-        TextView Subtitle;
+        @BindView(R.id.image_youtube) ImageView youtube_img;
+        @BindView(R.id.image_avatar) ImageView avatar_img;
+        @BindView(R.id.text_title) TextView title;
+        @BindView(R.id.text_subtitle) TextView subtitle;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            youtube_img = (ImageView) itemView.findViewById(R.id.Youtube_Image);
-            avatar_img = (ImageView) itemView.findViewById(R.id.Avatar_Image);
-            Title = (TextView) itemView.findViewById(R.id.Title);
-            Subtitle = (TextView) itemView.findViewById(R.id.SubTitle);
         }
     }
 

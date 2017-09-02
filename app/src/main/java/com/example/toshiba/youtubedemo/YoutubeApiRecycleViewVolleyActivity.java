@@ -16,9 +16,6 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -26,12 +23,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity implements ApiViewVolleyInterface{
-    @BindView(R.id.recycleview_youtube_volley) RecyclerView mYoutubeRecycleView;
-    @BindView(R.id.swipe_youtube_volley_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.recycleView_youtube_volley) RecyclerView youtubeRecycleView;
+    @BindView(R.id.swipe_youtube_volley_layout) SwipeRefreshLayout swipeRefreshLayout;
     YoutubeApiVolleyAdapter adapter;
     ApiVolleyModel apiVolleyModel;
     ApiVolleyPresenter apiVolleyPresenter;
-    List<VideoClip> clips;
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
 
     @Override
@@ -48,10 +44,10 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
         apiVolleyPresenter = new ApiVolleyPresenter(apiVolleyModel,jsonUrl);
         apiVolleyPresenter.bind(this);
         apiVolleyPresenter.displayAllResult();
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -64,16 +60,13 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
 
     @Override
     public void updateUi(List<VideoClip> clips) {
-//        Gson gson = new Gson();
-//        Youtube youtube = gson.fromJson(String.valueOf(response),Youtube.class);
-//        clips = youtube.getClips();
         Log.i("JsonClips",String.valueOf(clips));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        mYoutubeRecycleView.setLayoutManager(layoutManager);
+        youtubeRecycleView.setLayoutManager(layoutManager);
 
         adapter = new YoutubeApiVolleyAdapter(getApplicationContext(),clips);
-        mYoutubeRecycleView.setAdapter(adapter);
+        youtubeRecycleView.setAdapter(adapter);
     }
 
     @Override
@@ -102,8 +95,8 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
 
             Glide.with(ctx).load(videoClip.getYoutube_image()).fitCenter().into(holder.youtube_img);
             Glide.with(ctx).load(videoClip.getAvatar_image()).fitCenter().into(holder.avatar_img);
-            holder.Title.setText(videoClip.getTitle());
-            holder.Subtitle.setText(videoClip.getSubtitle());
+            holder.title.setText(videoClip.getTitle());
+            holder.subtitle.setText(videoClip.getSubtitle());
         }
 
         @Override
@@ -113,11 +106,10 @@ public class YoutubeApiRecycleViewVolleyActivity extends AppCompatActivity imple
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.Youtube_Image) ImageView youtube_img;
-        @BindView(R.id.Avatar_Image) ImageView avatar_img;
-        @BindView(R.id.Title) TextView Title;
-        @BindView(R.id.SubTitle) TextView Subtitle;
-
+        @BindView(R.id.image_youtube) ImageView youtube_img;
+        @BindView(R.id.image_avatar) ImageView avatar_img;
+        @BindView(R.id.text_title) TextView title;
+        @BindView(R.id.text_subtitle) TextView subtitle;
 
         ViewHolder(View itemView) {
             super(itemView);

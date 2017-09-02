@@ -2,6 +2,11 @@ package com.example.toshiba.youtubedemo;
 
 import android.support.annotation.NonNull;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +33,7 @@ class ApiRetrofitPresenter {
                     @Override
                     public void onResponse(@NonNull Call<Youtube> call, @NonNull Response<Youtube> response) {
                         if (response.isSuccessful()) {
-                            mApiViewRetrofitInterface.updateUi(response.body());
+                            mApiViewRetrofitInterface.updateUi(getClips(response.body()));
                         } else {
                             mApiViewRetrofitInterface.updateUnSuccessResponse(response.errorBody());
                         }
@@ -39,5 +44,9 @@ class ApiRetrofitPresenter {
                         mApiViewRetrofitInterface.updateFalseResponse(t);
                     }
                 });
+    }
+
+    private List<VideoClip> getClips(Youtube youtube){
+        return youtube.getClips();
     }
 }

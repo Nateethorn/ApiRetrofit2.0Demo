@@ -10,10 +10,12 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_youtube_retrofit"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_view_youtube_retrofit"
+        android:id="@+id/recycleView_youtube_retrofit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_clips" />

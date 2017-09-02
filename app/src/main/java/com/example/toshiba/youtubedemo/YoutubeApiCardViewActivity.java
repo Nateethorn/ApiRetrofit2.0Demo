@@ -30,8 +30,8 @@ import butterknife.ButterKnife;
 
 public class YoutubeApiCardViewActivity extends AppCompatActivity {
     final String JsonURL = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.YoutubeCardView) RecyclerView mYoutubeCardView;
-    @BindView(R.id.swipe_youtube_cardview_async) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.cardView_youtube) RecyclerView youtubeCardView;
+    @BindView(R.id.swipe_youtube_cardview_async) SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView.LayoutManager layoutManager;
     List<VideoClip> clips;
 
@@ -46,11 +46,11 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         createSynchronousOkHttp();
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 createSynchronousOkHttp();
-                mSwipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -88,10 +88,10 @@ public class YoutubeApiCardViewActivity extends AppCompatActivity {
                 clips = youtube.getClips();
 
                 layoutManager = new LinearLayoutManager(getApplicationContext());
-                mYoutubeCardView.setLayoutManager(layoutManager);
+                youtubeCardView.setLayoutManager(layoutManager);
 
                 YoutubeClipCardViewAdapter adapter = new YoutubeClipCardViewAdapter(getApplicationContext(),clips);
-                mYoutubeCardView.setAdapter(adapter);
+                youtubeCardView.setAdapter(adapter);
             }
         }.execute();
     }

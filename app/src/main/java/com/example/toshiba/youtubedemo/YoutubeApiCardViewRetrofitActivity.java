@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 
 public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
-    @BindView(R.id.cardview_youtube_retrofit) RecyclerView mCardViewYoutubeRetrofit;
-    @BindView(R.id.swipe_youtube_cardview_retrofit) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.cardView_youtube_retrofit) RecyclerView cardViewYoutubeRetrofit;
+    @BindView(R.id.swipe_youtube_cardview_retrofit) SwipeRefreshLayout swipeRefreshLayout;
     List<VideoClip> clips;
     ApiRetrofitModel apiModel;
     ApiRetrofitPresenter apiRetrofitPresenter;
@@ -42,12 +42,12 @@ public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity implem
         apiRetrofitPresenter = new ApiRetrofitPresenter(apiModel);
         apiRetrofitPresenter.bindView(this);
         apiRetrofitPresenter.displayResult();
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 apiRetrofitPresenter.bindView((ApiViewRetrofitInterface) getApplicationContext());
                 apiRetrofitPresenter.displayResult();
-                mSwipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -59,13 +59,12 @@ public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity implem
     }
 
     @Override
-    public void updateUi(Youtube youtube) {
-        clips = youtube.getClips();
+    public void updateUi(List<VideoClip> clips) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        mCardViewYoutubeRetrofit.setLayoutManager(layoutManager);
+        cardViewYoutubeRetrofit.setLayoutManager(layoutManager);
 
         YoutubeApiCardViewAdapter adapter = new YoutubeApiCardViewAdapter(getApplicationContext(),clips);
-        mCardViewYoutubeRetrofit.setAdapter(adapter);
+        cardViewYoutubeRetrofit.setAdapter(adapter);
     }
 
     @Override

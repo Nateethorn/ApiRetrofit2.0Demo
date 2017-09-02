@@ -14,9 +14,10 @@
         android:layout_marginRight="30dp">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/cardview_youtube_volley"
+            android:id="@+id/cardView_youtube_volley"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            tools:listitem="@layout/item_cardview_clips"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -14,7 +14,7 @@
         android:layout_marginRight="20dp">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/YoutubeRecycleView"
+            android:id="@+id/recycleView_youtube_AsyncTask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="8dp"

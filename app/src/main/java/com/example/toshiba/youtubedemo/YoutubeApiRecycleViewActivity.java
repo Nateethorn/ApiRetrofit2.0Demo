@@ -34,8 +34,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     final String jsonUrl = "http://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=foods";
-    @BindView(R.id.swipe_refresh_async_layout) SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.YoutubeRecycleView) RecyclerView mYoutubeRecycleView;
+    @BindView(R.id.swipe_refresh_async_layout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.recycleView_youtube_AsyncTask) RecyclerView youtubeRecycleView;
     RecyclerView.LayoutManager layoutManager;
     YoutubeClipRecycleViewAdapter adapter;
     List<VideoClip> clips;
@@ -46,7 +46,7 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_api_recycleview);
         ButterKnife.bind(this);
-        mRefreshLayout.setColorSchemeColors(Color.parseColor("#4183D7"),
+        refreshLayout.setColorSchemeColors(Color.parseColor("#4183D7"),
                 Color.parseColor("#F62459"),
                 Color.parseColor("#03C9A9"),
                 Color.parseColor("#F4D03F"));
@@ -56,12 +56,12 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         createSynchronousOKHttp();
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 createSynchronousOKHttp();
                 adapter.notifyDataSetChanged();
-                mRefreshLayout.setRefreshing(false);
+                refreshLayout.setRefreshing(false);
             }
         });
 //        AsynchronousOKHttp();
@@ -101,14 +101,14 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
                 Youtube youtube = gson.fromJson(String.valueOf(jsonObject),Youtube.class);
                 clips = youtube.getClips();
 
-                mYoutubeRecycleView.setHasFixedSize(true);
+                youtubeRecycleView.setHasFixedSize(true);
 
                 layoutManager = new LinearLayoutManager(YoutubeApiRecycleViewActivity.this);
                 layoutManager.setAutoMeasureEnabled(true);
-                mYoutubeRecycleView.setLayoutManager(layoutManager);
+                youtubeRecycleView.setLayoutManager(layoutManager);
 
                 adapter = new YoutubeClipRecycleViewAdapter(YoutubeApiRecycleViewActivity.this,clips);
-                mYoutubeRecycleView.setAdapter(adapter);
+                youtubeRecycleView.setAdapter(adapter);
             }
         }.execute();
     }
@@ -149,15 +149,15 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
                                 Youtube youtube = gson.fromJson(String.valueOf(jsonObject),Youtube.class);
                                 clips = youtube.getClips();
 
-                                mYoutubeRecycleView = (RecyclerView) findViewById(R.id.YoutubeRecycleView);
-                                mYoutubeRecycleView.setHasFixedSize(true);
+                                youtubeRecycleView = (RecyclerView) findViewById(R.id.recycleView_youtube_AsyncTask);
+                                youtubeRecycleView.setHasFixedSize(true);
 
                                 layoutManager = new LinearLayoutManager(YoutubeApiRecycleViewActivity.this);
                                 layoutManager.setAutoMeasureEnabled(true);
-                                mYoutubeRecycleView.setLayoutManager(layoutManager);
+                                youtubeRecycleView.setLayoutManager(layoutManager);
 
                                 YoutubeClipRecycleViewAdapter adapter = new YoutubeClipRecycleViewAdapter(YoutubeApiRecycleViewActivity.this,clips);
-                                mYoutubeRecycleView.setAdapter(adapter);
+                                youtubeRecycleView.setAdapter(adapter);
                             }
                         });                    }
 
@@ -192,8 +192,8 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
 
             Glide.with(ctx).load(videoClip.getYoutube_image()).fitCenter().into(holder.youtube_img);
             Glide.with(ctx).load(videoClip.getAvatar_image()).fitCenter().into(holder.avatar_img);
-            holder.Title.setText(videoClip.getTitle());
-            holder.Subtitle.setText(videoClip.getSubtitle());
+            holder.title.setText(videoClip.getTitle());
+            holder.subtitle.setText(videoClip.getSubtitle());
         }
 
         @Override
@@ -203,10 +203,10 @@ public class YoutubeApiRecycleViewActivity extends AppCompatActivity {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.Youtube_Image) ImageView youtube_img;
-        @BindView(R.id.Avatar_Image) ImageView avatar_img;
-        @BindView(R.id.Title) TextView Title;
-        @BindView(R.id.SubTitle) TextView Subtitle;
+        @BindView(R.id.image_youtube) ImageView youtube_img;
+        @BindView(R.id.image_avatar) ImageView avatar_img;
+        @BindView(R.id.text_title) TextView title;
+        @BindView(R.id.text_subtitle) TextView subtitle;
 
         ViewHolder(View itemView) {
             super(itemView);
