@@ -26,7 +26,6 @@ public class YoutubeApiRecycleViewRetrofitActivity extends AppCompatActivity imp
     @BindView(R.id.recycleView_youtube_retrofit) RecyclerView recyclerViewRetrofit;
     ApiRetrofitPresenter apiRetrofitPresenter;
     ApiRetrofitModel apiModel;
-    List<VideoClip> clips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -24,7 +24,6 @@ import okhttp3.ResponseBody;
 public class YoutubeApiCardViewRetrofitActivity extends AppCompatActivity implements ApiViewRetrofitInterface {
     @BindView(R.id.cardView_youtube_retrofit) RecyclerView cardViewYoutubeRetrofit;
     @BindView(R.id.swipe_youtube_cardview_retrofit) SwipeRefreshLayout swipeRefreshLayout;
-    List<VideoClip> clips;
     ApiRetrofitModel apiModel;
     ApiRetrofitPresenter apiRetrofitPresenter;
 

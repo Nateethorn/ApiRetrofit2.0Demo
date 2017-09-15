@@ -17,6 +17,8 @@ public class MenuActivity extends AppCompatActivity {
     @BindView(R.id.button_volley_recycleview) Button mRecycleViewWithVolleyBtn;
     @BindView(R.id.button_volley_cardview) Button mCardViewWithVolleyBtn;
     @BindView(R.id.button_staggered_grid_retrofit) Button mStaggeredGridWithRetrofitBtn;
+    @BindView(R.id.button_retrofit_treehouse) Button CardViewTreeHouseBtn;
+    @BindView(R.id.button_listView_student) Button StudentListViewBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,22 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),TreeHouseApiStaggeredGridActivity.class);
+                startActivity(i);
+            }
+        });
+
+        CardViewTreeHouseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),TreeHouseApiWithCardViewActivity.class);
+                startActivity(i);
+            }
+        });
+
+        StudentListViewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),StudentListViewActivity.class);
                 startActivity(i);
             }
         });

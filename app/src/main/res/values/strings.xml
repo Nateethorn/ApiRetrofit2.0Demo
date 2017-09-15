@@ -10,4 +10,6 @@
     <string name="recycleview_volley">RecycleView + Volley</string>
     <string name="cardview_volley">CardView + Volley</string>
     <string name="staggerredgrid_retrofit2_0">StaggerredGrid + Retrofit2.0</string>
+    <string name="recycleview_treehouse">RecycleView Treehouse</string>
+    <string name="student_listview">Student ListView</string>
 </resources>

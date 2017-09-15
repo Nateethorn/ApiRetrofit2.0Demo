@@ -56,10 +56,26 @@
         />
 
     <Button
+        android:id="@+id/button_retrofit_treehouse"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/recycleview_treehouse"
+        />
+
+    <Button
         android:id="@+id/button_staggered_grid_retrofit"
         android:layout_height="50dp"
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:text="@string/staggerredgrid_retrofit2_0"
+        />
+
+    <Button
+        android:id="@+id/button_listView_student"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:text="@string/student_listview"
         />
 </LinearLayout>
